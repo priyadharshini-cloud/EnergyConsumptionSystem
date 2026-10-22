@@ -142,7 +142,7 @@ python backend/app.py
 ### 5. Access the Web Application
 Open your browser and navigate to:
 ```
-http://localhost:5000
+https://energyconsumptionsystem.onrender.com  
 ```
 - Click **Quick Demo Login →** to enter the live dashboard immediately.
 - Use **⚡ Load 60-Day Sample Data** in the sidebar to populate realistic demonstration records.
