@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoltPulse | Smart Electricity Energy & Bill Prediction System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/frontend/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <script src="/frontend/script.js" defer></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="banner-inner">
+      <div class="uni-brand">
+        <span class="uni-logo-icon">⚡</span>
+        <div>
+          <div class="uni-name">VOLTPULSE ENERGY INTELLIGENCE</div>
+          <div class="uni-meta">Smart Electricity Energy & Bill Prediction Platform</div>
+        </div>
+      </div>
+      <div class="project-pill">
+        <span class="pill-label">STATUS:</span>
+        <span class="pill-title">DIGITAL METER SYNCHRONIZATION ACTIVE</span>
+      </div>
+      <div class="banner-credits">
+        <div class="credit-badge">
+          <small>GRID TARIFF</small>
+          <span id="topTariffBadge">Progressive Multi-Slab</span>
+        </div>
+        <div class="credit-badge guide">
+          <small>PREDICTIVE ENGINE</small>
+          <span>Scikit-Learn ML Model</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-flash">⚡</span>
+        <div>
+          <b class="brand-text">VoltPulse</b>
+          <span class="brand-sub">ENERGY PREDICTOR</span>
+        </div>
+      </div>
+
+      <div class="sidebar-user">
+        <div class="user-avatar" id="userAvatar">C</div>
+        <div class="user-info">
+          <div class="user-name" id="userName">Consumer Account</div>
+          <div class="user-email" id="userEmail">consumer@energypulse.io</div>
+        </div>
+      </div>
+
+      <nav class="side-nav">
+        <span class="nav-heading">NAVIGATION</span>
+        <a href="#overview" class="nav-item active" data-section="overview">
+          <span class="nav-icon">📊</span> Overview & KPIs
+        </a>
+        <a href="#meter-entry" class="nav-item" data-section="meter-entry">
+          <span class="nav-icon">📝</span> Record Meter Reading
+        </a>
+        <a href="#billing-slabs" class="nav-item" data-section="billing-slabs">
+          <span class="nav-icon">₹</span> Progressive Tariff Slabs
+        </a>
+        <a href="#ml-forecast" class="nav-item" data-section="ml-forecast">
+          <span class="nav-icon">🤖</span> Machine Learning Forecast
+        </a>
+        <a href="#consumption-analytics" class="nav-item" data-section="consumption-analytics">
+          <span class="nav-icon">📈</span> Monthly Analytics & Trends
+        </a>
+        <a href="#history-section" class="nav-item" data-section="history-section">
+          <span class="nav-icon">🕒</span> Meter Readings History
+        </a>
+        <a href="#simulator" class="nav-item" data-section="simulator">
+          <span class="nav-icon">💡</span> "What-If" Bill Simulator
+        </a>
+      </nav>
+
+      <div class="sidebar-actions">
+        <button type="button" id="demoDataBtn" class="action-btn demo-btn" title="Load realistic 60-day consumption dataset for demonstration">
+          <span>⚡</span> Load 60-Day Sample Data
+        </button>
+        <button type="button" id="downloadPdfBtn" class="action-btn pdf-btn">
+          <span>📄</span> Official PDF Energy Report
+        </button>
+        <button type="button" id="logoutBtn" class="action-btn logout-btn">
+          <span>🚪</span> Sign Out
+        </button>
+      </div>
+
+      <div class="sidebar-footer">
+        <span class="status-indicator"></span>
+        <small>System Online &bull; Python Flask + SQLite</small>
+      </div>
+    </aside>
+
+    <!-- Main Content Stream -->
+    <main class="main-content">
+      <!-- Top Action Bar -->
+      <section class="top-bar">
+        <div>
+          <h1 class="page-title">Electricity Consumption & Prediction Dashboard</h1>
+          <p class="page-subtitle">Real-time daily meter tracking, multi-tier tariff slab billing, and machine learning bill forecasting.</p>
+        </div>
+        <div class="top-bar-right">
+          <div class="date-chip">
+            <span class="cal-icon">📅</span>
+            <span id="currentDateStr">Loading date...</span>
+          </div>
+          <button type="button" id="refreshDashboardBtn" class="refresh-btn" title="Refresh all statistics">
+            <span>↻</span> Refresh
+          </button>
+        </div>
+      </section>
+
+      <!-- Section: Key Summary KPI Cards -->
+      <section class="kpi-grid" id="overview">
+        <!-- Card 1: Today's Usage -->
+        <article class="kpi-card teal">
+          <div class="kpi-header">
+            <span class="kpi-label">TODAY'S USAGE</span>
+            <span class="kpi-icon">⚡</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value" id="kpiTodayKwh">0.00</span>
+            <span class="kpi-unit">kWh</span>
+          </div>
+          <div class="kpi-footer">
+            <span>Est. Today's Cost:</span>
+            <b id="kpiTodayCost">₹0.00</b>
+          </div>
+        </article>
+
+        <!-- Card 2: Current Month Accumulated -->
+        <article class="kpi-card blue">
+          <div class="kpi-header">
+            <span class="kpi-label">CURRENT MONTH UNITS</span>
+            <span class="kpi-icon">📅</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value" id="kpiMonthKwh">0.00</span>
+            <span class="kpi-unit">kWh</span>
+          </div>
+          <div class="kpi-footer">
+            <span id="kpiMonthLabel">Billing Cycle</span>
+            <b class="badge-tag">Current Month</b>
+          </div>
+        </article>
+
+        <!-- Card 3: Estimated Current Bill -->
+        <article class="kpi-card emerald">
+          <div class="kpi-header">
+            <span class="kpi-label">CURRENT ESTIMATED BILL</span>
+            <span class="kpi-icon">₹</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-currency">₹</span>
+            <span class="kpi-value" id="kpiMonthBill">0.00</span>
+          </div>
+          <div class="kpi-footer">
+            <span>Tiered Progressive Slabs</span>
+            <b class="rate-badge" id="kpiTariffPreset">Domestic Slabs</b>
+          </div>
+        </article>
+
+        <!-- Card 4: ML Next-Month Forecast -->
+        <article class="kpi-card purple">
+          <div class="kpi-header">
+            <span class="kpi-label">ML FORECAST (NEXT MONTH)</span>
+            <span class="kpi-icon">🤖</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value" id="kpiForecastKwh">0.00</span>
+            <span class="kpi-unit">kWh</span>
+          </div>
+          <div class="kpi-footer">
+            <span>Predicted Bill:</span>
+            <b id="kpiForecastBill" class="highlight-cost">₹0.00</b>
+          </div>
+        </article>
+      </section>
+
+      <!-- Section: Meter Entry Form -->
+      <section class="content-row" id="meter-entry">
+        <div class="card form-card">
+          <div class="card-header">
+            <div>
+              <span class="section-tag">DAILY METER TRACKING</span>
+              <h2 class="card-title">Daily Electricity Meter Reading Entry</h2>
+              <p class="card-desc">Enter today's physical meter reading. The system automatically computes daily consumption ($Current − Previous = kWh$).</p>
+            </div>
+            <span class="live-pill">● Automatic Units Calculation</span>
+          </div>
+
+          <form id="meterForm" class="meter-form">
+            <div class="form-grid">
+              <div class="input-field">
+                <label for="readingDate">Reading Date</label>
+                <input type="date" id="readingDate" required>
+                <small class="field-hint">Defaults to today in Indian Standard Time (IST)</small>
+              </div>
+
+              <div class="input-field">
+                <label for="meterAppliance">Meter / Circuit Category</label>
+                <select id="meterAppliance">
+                  <option value="Main Household Meter">Main Household Meter</option>
+                  <option value="Air Conditioner (AC) Circuit">Air Conditioner (AC) Circuit</option>
+                  <option value="Kitchen & Heavy Appliances">Kitchen & Heavy Appliances</option>
+                  <option value="Lighting & Domestic Fans">Lighting & Domestic Fans</option>
+                </select>
+                <small class="field-hint">Submeter classification for energy breakdown</small>
+              </div>
+
+              <div class="input-field">
+                <label for="prevReading">Previous Meter Reading (kWh)</label>
+                <input type="number" id="prevReading" step="0.01" min="0" required placeholder="Auto-filled from last reading">
+                <small class="field-hint">Preloaded with your most recent saved reading</small>
+              </div>
+
+              <div class="input-field">
+                <label for="currReading">Current Meter Reading (kWh)</label>
+                <input type="number" id="currReading" step="0.01" min="0" required placeholder="e.g. 12458">
+                <small class="field-hint">Enter the latest cumulative reading from your meter</small>
+              </div>
+            </div>
+
+            <!-- Real-time calculation feedback card -->
+            <div class="calc-preview-card">
+              <div class="calc-col">
+                <small>CALCULATED ENERGY CONSUMED</small>
+                <div class="calc-val-box">
+                  <span id="previewKwh" class="calc-highlight">0.00</span>
+                  <span class="calc-sub">kWh (Units)</span>
+                </div>
+              </div>
+              <div class="calc-math">
+                <span class="math-eq" id="mathEquation">Current Reading (0.00) − Previous Reading (0.00) = 0.00 kWh</span>
+              </div>
+              <div class="calc-col right">
+                <small>ESTIMATED DAILY COST</small>
+                <div class="calc-val-box">
+                  <span class="calc-curr">₹</span>
+                  <span id="previewCost" class="calc-highlight">0.00</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" id="saveReadingBtn" class="primary-btn">
+                <span>➕</span> Save Daily Meter Reading
+              </button>
+              <button type="button" id="resetFormBtn" class="secondary-btn">Reset</button>
+              <span id="formFeedback" class="form-feedback"></span>
+            </div>
+          </form>
+        </div>
+
+        <!-- Tariff Slab Breakdown Card -->
+        <div class="card slab-card" id="billing-slabs">
+          <div class="card-header">
+            <div>
+              <span class="section-tag">PROGRESSIVE BILL ESTIMATION</span>
+              <h2 class="card-title">Progressive Tariff Slab Breakdown</h2>
+              <p class="card-desc">Accurate tiered billing calculation (0-100 free subsidy, tiered slabs, fixed charges, 5% duty).</p>
+            </div>
+            <button type="button" id="toggleTariffModalBtn" class="small-btn">⚙ Tariff Config</button>
+          </div>
+
+          <div class="slab-progress-container" id="slabProgressList">
+            <!-- Dynamic slab tiers rendered by JS -->
+            <div class="loading-state">Calculating progressive tariff slabs...</div>
+          </div>
+
+          <div class="bill-summary-breakdown" id="billSummaryBox">
+            <div class="bill-row">
+              <span>Energy Charges Subtotal:</span>
+              <b id="billEnergyCharges">₹0.00</b>
+            </div>
+            <div class="bill-row">
+              <span>Fixed Meter Demand Charge:</span>
+              <b id="billFixedCharge">₹50.00</b>
+            </div>
+            <div class="bill-row">
+              <span>Electricity Duty / Tax (5%):</span>
+              <b id="billTax">₹0.00</b>
+            </div>
+            <div class="bill-row total">
+              <span>TOTAL ESTIMATED BILL:</span>
+              <b id="billTotalAmount">₹0.00</b>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Machine Learning Model -->
+      <section class="card ml-card" id="ml-forecast">
+        <div class="card-header">
+          <div>
+            <span class="section-tag">PREDICTIVE ARTIFICIAL INTELLIGENCE</span>
+            <h2 class="card-title">Scikit-Learn Linear Regression Forecasting Model</h2>
+            <p class="card-desc">Trained on chronological daily consumption patterns to project upcoming 30-day usage and estimated billing.</p>
+          </div>
+          <div class="ml-status-pill">
+            <span class="pill-dot"></span>
+            <span>Scikit-Learn Regression Engine Active</span>
+          </div>
+        </div>
+
+        <div class="ml-dashboard-grid">
+          <div class="ml-stat-tile">
+            <span class="ml-stat-label">Model Architecture</span>
+            <b class="ml-stat-val mono">LinearRegression()</b>
+            <small>Ordinary Least Squares (OLS)</small>
+          </div>
+          <div class="ml-stat-tile">
+            <span class="ml-stat-label">Coefficient of Determination (R²)</span>
+            <b class="ml-stat-val highlight" id="mlR2Score">0.000</b>
+            <small>Statistical goodness-of-fit</small>
+          </div>
+          <div class="ml-stat-tile">
+            <span class="ml-stat-label">Daily Trend Equation</span>
+            <b class="ml-stat-val mono" id="mlEquation">y = mx + c</b>
+            <small id="mlTrendDesc">Analyzing slope...</small>
+          </div>
+          <div class="ml-stat-tile highlight-box">
+            <span class="ml-stat-label">Upcoming Month (30-Day) Forecast</span>
+            <b class="ml-stat-val big" id="mlForecastUnits">0.00 kWh</b>
+            <small>Projected Bill: <b id="mlForecastCost">₹0.00</b></small>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <span class="chart-title">Historical Consumption vs. Linear Regression Fit & 30-Day Forward Forecast</span>
+            <div class="chart-legend-custom">
+              <span class="legend-chip hist">■ Actual Consumption</span>
+              <span class="legend-chip trend">── Linear Fit</span>
+              <span class="legend-chip fore">┈ 30-Day Projection</span>
+            </div>
+          </div>
+          <div class="canvas-container">
+            <canvas id="forecastChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Consumption Analytics & Trends -->
+      <section class="analytics-row" id="consumption-analytics">
+        <!-- Chart: Daily Consumption Trend -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <div>
+              <span class="section-tag">CONSUMPTION ANALYTICS</span>
+              <h2 class="card-title">Daily Energy Consumption History</h2>
+              <p class="card-desc">Recorded daily kWh with trend smoothing.</p>
+            </div>
+            <select id="analyticsFilter" class="small-select">
+              <option value="30">Last 30 Days</option>
+              <option value="60" selected>Last 60 Days</option>
+              <option value="14">Last 14 Days</option>
+              <option value="7">Last 7 Days</option>
+            </select>
+          </div>
+          <div class="canvas-container">
+            <canvas id="dailyTrendChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart: Month-to-Month Comparison -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <div>
+              <span class="section-tag">COMPARATIVE ANALYTICS</span>
+              <h2 class="card-title">Month-over-Month Usage & Bill Comparison</h2>
+              <p class="card-desc">Tracks consumption and expenditure variance across billing cycles.</p>
+            </div>
+          </div>
+          <div class="canvas-container">
+            <canvas id="monthCompareChart"></canvas>
+          </div>
+          <div class="compare-feedback-box" id="compareInsightText">
+            Comparing monthly energy patterns...
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Interactive "What-If" Tariff Simulator -->
+      <section class="card simulator-card" id="simulator">
+        <div class="card-header">
+          <div>
+            <span class="section-tag">INTERACTIVE ENERGY SIMULATOR</span>
+            <h2 class="card-title">"What-If" Electricity Bill Calculator</h2>
+            <p class="card-desc">Drag the slider to simulate monthly electricity units and instantly preview your bill across all tariff slabs.</p>
+          </div>
+          <span class="sim-badge">Live Calculator</span>
+        </div>
+
+        <div class="simulator-body">
+          <div class="slider-control">
+            <div class="slider-header">
+              <span>Simulated Monthly Units:</span>
+              <b class="slider-val"><span id="simUnitsLabel">265</span> kWh</b>
+            </div>
+            <input type="range" id="simSlider" min="10" max="800" step="5" value="265" class="range-slider">
+            <div class="slider-ticks">
+              <span>10 kWh</span>
+              <span>100 kWh (Free)</span>
+              <span>200 kWh</span>
+              <span>400 kWh</span>
+              <span>600 kWh</span>
+              <span>800 kWh</span>
+            </div>
+          </div>
+
+          <div class="sim-result-card">
+            <div class="sim-res-item">
+              <small>Simulated Bill</small>
+              <h3 id="simTotalBill">₹595.88</h3>
+            </div>
+            <div class="sim-res-item">
+              <small>Effective Rate</small>
+              <h3 id="simEffectiveRate">₹2.25 / kWh</h3>
+            </div>
+            <div class="sim-res-item">
+              <small>Highest Slab Reached</small>
+              <h3 id="simSlabTier">Slab 3 (201 - 400)</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Historical Readings Table -->
+      <section class="card history-card" id="history-section">
+        <div class="card-header">
+          <div>
+            <span class="section-tag">METER DATA LOG</span>
+            <h2 class="card-title">Comprehensive Meter Readings Audit History</h2>
+            <p class="card-desc">All historical meter records stored securely in your database.</p>
+          </div>
+          <div class="table-actions">
+            <input type="text" id="searchTableInput" placeholder="🔍 Search date or appliance..." class="search-input">
+            <button type="button" id="exportCsvBtn" class="small-btn outline">Export CSV</button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Appliance / Circuit</th>
+                <th>Previous Reading (kWh)</th>
+                <th>Current Reading (kWh)</th>
+                <th>Units Consumed (kWh)</th>
+                <th>Estimated Cost (₹)</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="readingsTableBody">
+              <tr>
+                <td colspan="7" class="empty-state">Loading meter readings from database...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Professional Download Report Banner -->
+      <section class="report-banner-card">
+        <div class="report-banner-content">
+          <div class="report-badge">CONSUMER ENERGY AUDIT</div>
+          <h2>Official Electricity Consumption & Forecast Audit Report</h2>
+          <p>Generate a certified PDF audit report compiled with consumer account summary, progressive slab breakdowns, machine learning regression metrics, and complete daily meter logs.</p>
+        </div>
+        <div class="report-banner-action">
+          <button type="button" id="downloadPdfBannerBtn" class="download-report-btn">
+            <span>📥</span> Download PDF Energy Report
+          </button>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="app-footer">
+        <div class="footer-left">
+          <b>VOLTPULSE &bull; SMART ELECTRICITY ENERGY PREDICTION SYSTEM</b>
+          <p>Enterprise Household & Commercial Electricity Meter Management System</p>
+        </div>
+        <div class="footer-center">
+          <span>Real-time Meter Tracking &bull; Progressive Slab Costing &bull; Machine Learning Forecasts</span>
+        </div>
+        <div class="footer-right">
+          <span class="tech-stack-tag">Python &bull; Flask &bull; SQLite &bull; Scikit-Learn &bull; Chart.js</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Tariff Configuration Modal -->
+  <div class="modal-overlay" id="tariffModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>⚙ Configure Electricity Tariff Slabs</h3>
+        <button type="button" id="closeTariffModalBtn" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">Select a state utility tariff preset or define customized slab limits and rates per unit.</p>
+        
+        <div class="form-group">
+          <label>Tariff Preset</label>
+          <select id="tariffPresetSelect" class="styled-select">
+            <option value="TNEB_Domestic">State Utility Domestic Subsidized (100 Units Free)</option>
+            <option value="Standard_Tiered">Standard Progressive Domestic (Tiered)</option>
+            <option value="Commercial">Commercial / High Demand Tier</option>
+          </select>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Fixed Meter Demand Charge (₹)</label>
+            <input type="number" id="tariffFixedCharge" value="50" min="0" step="5">
+          </div>
+          <div class="form-group">
+            <label>Electricity Duty / Tax (%)</label>
+            <input type="number" id="tariffTaxRate" value="5" min="0" step="0.5">
+          </div>
+        </div>
+
+        <div class="tariff-preview-table-box">
+          <label>Active Slab Tiers</label>
+          <div id="tariffSlabPreview">
+            <!-- Dynamic slab tiers -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="saveTariffBtn" class="primary-btn">Save Tariff Settings</button>
+        <button type="button" id="cancelTariffBtn" class="secondary-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastNotification" class="toast" style="display: none;"></div>
+</body>
+</html>

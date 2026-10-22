@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EnergyPredict | Welcome</title>
+  <link rel="stylesheet" href="/frontend/login.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="/frontend/login.js" defer></script>
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-brand">
+      <div class="brand-mark">⚡</div>
+      <div class="brand-name">EnergyPredict</div>
+      <p>Understand your electricity usage. Plan your energy expenses. Make informed decisions.</p>
+      <div class="auth-feature"><span>✦</span> Consumption monitoring</div>
+      <div class="auth-feature"><span>✦</span> Electricity bill estimation</div>
+      <div class="auth-feature"><span>✦</span> Usage trend analysis</div>
+      <div class="auth-feature"><span>✦</span> Monthly consumption forecast</div>
+    </section>
+
+    <section class="auth-card">
+      <div class="tabs">
+        <button type="button" id="loginTab" class="tab active">Sign in</button>
+        <button type="button" id="registerTab" class="tab">Create account</button>
+      </div>
+
+      <h1 id="formTitle">Welcome back</h1>
+      <p class="muted" id="formSubtitle">Sign in to view your energy dashboard.</p>
+
+      <form id="authForm">
+        <div id="nameField" class="hidden">
+          <label for="name">Full name</label>
+          <input id="name" name="name" autocomplete="name" placeholder="Your name">
+        </div>
+
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" required
+               autocomplete="email" placeholder="you@example.com">
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required
+               minlength="8" autocomplete="current-password"
+               placeholder="At least 8 characters">
+
+        <button class="primary-btn" type="submit" id="submitButton">Sign in</button>
+        <p id="authMessage" class="message" role="status"></p>
+      </form>
+
+      <div class="divider">or continue with</div>
+      <div id="googleButton" class="google-wrap"></div>
+      <p id="googleMessage" class="message" role="status"></p>
+      <p class="fineprint">Your readings are saved to your account. Bill values are estimates, not official utility bills.</p>
+     
+<div class="google-login-wrapper">
+    <div
+        id="g_id_onload"
+        data-client_id="363162487877-57o9frbktb36nasdu56kikejkkvlsjk8.apps.googleusercontent.com"
+        data-callback="handleGoogleSignIn"
+        data-auto_prompt="false">
+    </div>
+
+    <div
+        class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="continue_with"
+        data-shape="rectangular"
+        data-logo_alignment="left"
+        data-width="380">
+    </div>
+</div>
+    </section>
+  </main>
+  <script src="/frontend/login.js"></script>
+</body>
+</html>

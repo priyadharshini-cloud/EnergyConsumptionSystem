@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EnergyPredict | Dashboard</title>
+  <link rel="stylesheet" href="/frontend/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/frontend/script.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#dashboard">
+      <span class="brand-icon">⚡</span>
+      <span><b>EnergyPredict</b><small>Energy Intelligence</small></span>
+    </a>
+
+    <p class="menu-title">MAIN MENU</p>
+    <nav class="side-nav">
+      <a class="nav-link active" href="#dashboard">⌂ &nbsp; Dashboard</a>
+      <a class="nav-link" href="#consumption">▥ &nbsp; Consumption</a>
+      <a class="nav-link" href="#billing">₹ &nbsp; Bill Estimate</a>
+      <a class="nav-link" href="#prediction">✧ &nbsp; Prediction</a>
+      <a class="nav-link" href="#history">◷ &nbsp; History</a>
+      <a class="nav-link" href="#report">▤ &nbsp; Energy Report</a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <span class="live-dot"></span>
+      <div><b>System ready</b><small>Energy monitoring enabled</small></div>
+    </div>
+  </aside>
+
+  <main class="main-content" id="dashboard">
+    <header class="topbar">
+      <div>
+        <span class="eyebrow">ENERGY MONITORING SYSTEM</span>
+        <h1>Energy Dashboard</h1>
+        <p>Monitor, analyse and predict your electricity consumption.</p>
+      </div>
+      <div class="profile">
+        <div class="avatar" id="userAvatar">U</div>
+        <div><b id="userName">Loading account...</b><small id="userEmail"></small></div>
+        <button id="logoutButton" class="secondary-btn" type="button">Log out</button>
+      </div>
+    </header>
+
+    <section class="summary-grid">
+      <article class="summary-card">
+        <div class="summary-icon soft-green">⚡</div>
+        <div><span>Today's consumption</span><h2 id="todayKwh">— <small>kWh</small></h2><p>Recorded today</p></div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-icon soft-purple">▥</div>
+        <div><span>Monthly consumption</span><h2 id="monthKwh">— <small>kWh</small></h2><p>Current calendar month</p></div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-icon soft-lime">₹</div>
+        <div><span>Estimated bill</span><h2 id="estimatedBill">₹—</h2><p>Illustrative estimate</p></div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-icon soft-orange">✧</div>
+        <div><span>Tomorrow's estimate</span><h2 id="tomorrowKwh">— <small>kWh</small></h2><p>Recent usage average</p></div>
+      </article>
+    </section>
+
+    <section class="card section-card" id="consumption">
+      <div class="card-header">
+        <div><span class="eyebrow">CONSUMPTION ANALYTICS</span><h2>Electricity usage</h2><p>Your recorded daily energy consumption.</p></div>
+        <span class="pill">Last 30 records</span>
+      </div>
+      <div class="chart-area"><canvas id="consumptionChart"></canvas></div>
+      <p id="chartMessage" class="muted"></p>
+    </section>
+
+    <section class="content-grid">
+      <article class="card section-card">
+        <div class="card-header">
+          <div><span class="eyebrow">METER INPUT</span><h2>Add meter reading</h2><p>Enter the reading shown on your meter.</p></div>
+        </div>
+        <form id="readingForm">
+          <label for="readingDate">Reading date</label>
+          <input type="date" id="readingDate" required>
+          <div class="form-row">
+            <div><label for="previousReading">Previous reading (kWh)</label><input type="number" id="previousReading" min="0" step="any" required></div>
+            <div><label for="currentReading">Current reading (kWh)</label><input type="number" id="currentReading" min="0" step="any" required></div>
+          </div>
+          <p class="helper">Energy consumed = current meter reading − previous meter reading.</p>
+          <button class="primary-btn" type="submit" id="saveReadingButton">＋ Save reading</button>
+          <p id="readingMessage" class="message" role="status"></p>
+        </form>
+      </article>
+
+      <article class="card section-card" id="billing">
+        <div class="card-header">
+          <div><span class="eyebrow">BILL ESTIMATE</span><h2>Monthly bill overview</h2><p>Based on your saved readings.</p></div>
+          <span class="pill lime-pill">Estimate</span>
+        </div>
+        <div class="highlight">
+          <div><small>Estimated amount</small><h2 id="billAmount">₹—</h2><p id="billUsage">— kWh this month</p></div>
+          <span class="highlight-icon">₹</span>
+        </div>
+        <div class="detail-row"><span>Illustrative rate</span><b id="ratePerKwh">₹6 / kWh</b></div>
+        <div class="detail-row"><span>Calculation</span><b>Usage × rate</b></div>
+        <p class="notice">This is an educational estimate using a flat example rate, not an official electricity tariff or utility bill.</p>
+      </article>
+    </section>
+
+    <section class="content-grid" id="prediction">
+      <article class="card section-card">
+        <div class="card-header">
+          <div><span class="eyebrow">USAGE FORECAST</span><h2>Consumption prediction</h2><p>A simple forecast based on recent records.</p></div>
+          <span class="pill purple-pill">Average-based</span>
+        </div>
+        <div class="prediction-grid">
+          <div><small>Next-day estimate</small><b id="predictionTomorrow">— kWh</b></div>
+          <div><small>Next 30-day estimate</small><b id="predictionMonth">— kWh</b></div>
+        </div>
+        <div class="detail-row"><span>Predicted bill</span><b id="predictionBill">₹—</b></div>
+        <p class="notice">The forecast is an average-based estimate. It is not a trained machine-learning model and may differ from actual usage.</p>
+      </article>
+
+      <article class="card section-card">
+        <div class="card-header">
+          <div><span class="eyebrow">ENERGY INSIGHTS</span><h2>Consumption summary</h2><p>Statistics from your saved readings.</p></div>
+        </div>
+        <div class="detail-row"><span>Average per reading</span><b id="averageUsage">— kWh</b></div>
+        <div class="detail-row"><span>Highest recorded</span><b id="highestUsage">— kWh</b></div>
+        <div class="detail-row"><span>Lowest recorded</span><b id="lowestUsage">— kWh</b></div>
+        <div class="detail-row"><span>Number of records</span><b id="recordCount">0</b></div>
+      </article>
+    </section>
+
+    <section class="card section-card" id="history">
+      <div class="card-header">
+        <div><span class="eyebrow">METER HISTORY</span><h2>Recent consumption records</h2><p>Readings saved to your account.</p></div>
+        <button id="refreshButton" class="secondary-btn" type="button">↻ Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Previous</th><th>Current</th><th>Consumed</th><th>Action</th></tr></thead>
+          <tbody id="historyBody"><tr><td colspan="5">Loading readings...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="report-banner" id="report">
+      <div><span class="eyebrow">YOUR ENERGY REPORT</span><h2>Turn your readings into a report</h2><p>Download a PDF with your consumption history and estimated bill.</p></div>
+      <button id="reportButton" class="report-btn" type="button">⇩ Generate PDF report</button>
+    </section>
+
+    <footer><b>EnergyPredict</b><span>Energy Consumption and Prediction Analysis System</span><span class="footer-note">Estimates are for educational use.</span></footer>
+  </main>
+  <div id="toast" class="toast" role="status"></div>
+</body>
+</html>

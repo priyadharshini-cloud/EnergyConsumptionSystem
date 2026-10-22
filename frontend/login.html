@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoltPulse | Smart Electricity Energy & Bill Prediction System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/frontend/login.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="/frontend/login.js" defer></script>
+</head>
+<body>
+  <div class="auth-wrapper">
+    <!-- Enterprise Energy Hero Sidebar -->
+    <aside class="auth-hero">
+      <div class="hero-header">
+        <div class="university-pill">
+          <span class="uni-icon">⚡</span>
+          <span>SMART ENERGY INTELLIGENCE PLATFORM</span>
+        </div>
+        <p class="dept-tag">Household & Commercial Electricity Meter Management System</p>
+      </div>
+
+      <div class="hero-body">
+        <div class="brand-tag">
+          <span class="flash-icon">⚡</span>
+          <span class="brand-name">VoltPulse Analytics</span>
+        </div>
+        <h1 class="hero-title">Smart Electricity Energy & Bill Prediction System</h1>
+        <p class="hero-desc">
+          An intelligent web platform that monitors daily electricity meter consumption, calculates tiered tariff slab charges in real time, and accurately forecasts upcoming monthly electricity bills using Machine Learning predictive models.
+        </p>
+
+        <div class="feature-checklist">
+          <div class="feature-item">
+            <span class="feat-check">✓</span>
+            <div>
+              <b>Automated Daily Consumption Calculation</b>
+              <small>Instantly converts daily meter readings (Current − Previous) to kWh consumed</small>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feat-check">✓</span>
+            <div>
+              <b>Progressive Tiered Tariff Slabs</b>
+              <small>Dynamic multi-slab billing engine (subsidized free units + tiered progressive rates)</small>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feat-check">✓</span>
+            <div>
+              <b>Scikit-Learn Machine Learning Forecasting</b>
+              <small>Trained linear regression model predicts upcoming 30-day demand and bill totals</small>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feat-check">✓</span>
+            <div>
+              <b>Month-to-Month Comparative Analytics</b>
+              <small>Tracks consumption trends, peak usage days, and cycle-over-cycle cost variances</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="academic-credits">
+        <div class="credit-col">
+          <span class="credit-role">SYSTEM CAPABILITIES</span>
+          <b>Daily Energy Meter Tracking</b>
+          <b>Predictive ML Bill Forecasting</b>
+        </div>
+        <div class="credit-col">
+          <span class="credit-role">SECURITY & COMPLIANCE</span>
+          <b>Encrypted Consumer Data</b>
+          <b>Multi-Slab Utility Engine</b>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Authentication Form Card -->
+    <main class="auth-container">
+      <div class="auth-card">
+        <div class="auth-card-header">
+          <div class="mobile-logo">
+            <span class="flash-icon">⚡</span>
+            <span>VoltPulse Energy</span>
+          </div>
+          <div class="tab-switch">
+            <button type="button" id="tabLogin" class="tab-btn active">Sign In</button>
+            <button type="button" id="tabRegister" class="tab-btn">Create Account</button>
+          </div>
+          <h2 id="formTitle">Consumer Portal</h2>
+          <p id="formSubtitle" class="auth-subtitle">Sign in to access your electricity consumption dashboard & predictive bill forecast.</p>
+        </div>
+
+        <!-- Quick Demo Consumer Login -->
+        <div class="demo-access-box">
+          <div class="demo-text">
+            <span>⚡ Interactive Consumer Demo</span>
+            <small>Click to enter instantly and explore the live energy dashboard</small>
+          </div>
+          <button type="button" id="demoLoginBtn" class="demo-btn">
+            Quick Demo Login &rarr;
+          </button>
+        </div>
+
+        <form id="authForm" novalidate>
+          <div id="nameGroup" class="form-group" style="display: none;">
+            <label for="fullName">Full Name / Household Name</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input type="text" id="fullName" placeholder="e.g. Household Account" autocomplete="name">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉</span>
+              <input type="email" id="email" required placeholder="name@example.com" autocomplete="email" value="consumer@energypulse.io">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="password" required placeholder="Enter password (default: demo123)" autocomplete="current-password" value="demo123">
+            </div>
+          </div>
+
+          <div id="authAlert" class="alert-box" style="display: none;"></div>
+
+          <button type="submit" id="submitBtn" class="submit-btn">
+            <span id="submitText">Sign In to Dashboard</span>
+            <span id="submitSpinner" class="spinner" style="display: none;"></span>
+          </button>
+        </form>
+
+        <div class="divider">
+          <span>or continue with Google</span>
+        </div>
+
+        <div class="google-box">
+          <div id="g_id_onload"
+               data-client_id="363162487877-57o9frbktb36nasdu56kikejkkvlsjk8.apps.googleusercontent.com"
+               data-callback="handleGoogleSignIn"
+               data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin"
+               data-type="standard"
+               data-size="large"
+               data-theme="outline"
+               data-text="signin_with"
+               data-shape="rectangular"
+               data-logo_alignment="left"
+               data-width="360">
+          </div>
+        </div>
+
+        <div class="auth-footer">
+          <p>VoltPulse &bull; Smart Electricity Consumption & Prediction Platform</p>
+          <small>Estimates are calculated using progressive tariff slabs and Scikit-learn regression models.</small>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
